@@ -1,6 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from math import *
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def foo1(x: float) -> float:
@@ -8,7 +9,7 @@ def foo1(x: float) -> float:
 
 
 def foo2(x: float) -> float:
-    return (2 * x ** 3 + x ** 2 + 3 * x + 7)/2000
+    return (2 * x ** 3 + x ** 2 + 3 * x + 7) / 2000
 
 
 def foo3(x: float) -> float:
@@ -66,6 +67,13 @@ def plot_results(x, y, polynomial, chart_name):
     plt.close()
 
 
+def make_csv(name, x, y):
+    with open('csv/' + name + '.csv', 'w') as f:
+        for i in range(x.size):
+            f.write(str(x[i]) + ',' + str(y[i]) + '\n')
+        f.close()
+
+
 if __name__ == '__main__':
     functions = [foo1, foo2, foo3, foo4, foo5]
     distributions = ['normal', 'poisson', 'exp']
@@ -77,10 +85,10 @@ if __name__ == '__main__':
             my = np.asarray(list(map(function, mx)))
             name_and_size = function.__name__ + '_' + d2n(size, density)
             plot_results(mx, my, get_polynomial_fit(mx, my, pd), name_and_size)
-            np.savetxt('csv/' + name_and_size + '.csv', (mx, my))
+            make_csv(name_and_size, mx, my)
             for d in distributions:
                 new_y = add_noise(my, d)
                 label = str(name_and_size) + '_' + d
                 plot_results(mx, new_y, get_polynomial_fit(mx, new_y, pd),
                              label)
-                np.savetxt('csv/' + label + '.csv', (mx, new_y))
+                make_csv(label, mx, new_y)
